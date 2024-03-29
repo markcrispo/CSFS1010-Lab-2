@@ -25,14 +25,14 @@ Next, we'll want to be able to remove specific tasks from the To-Do list. To acc
 
 In `ToDoItem`:
 
-- Add a "Remove" button, and a `handleRemove` prop
-- convert the `useState` hooks for the checkbox and text field to props
+- Convert the `useState` hooks for the checkbox and text field to props
 
 In `App.jsx`:
 
 - Add `const [todos, setTodos] = useState([{ title: 'Get groceries', isChecked: false }])`
 - Map the `todos` state to the `<ToDoItem />` component
 - Implement functions `setIsChecked` and `setTitle` for a to-do item at a particular index
+- Hook up the "Add" and "Remove" buttons that we added in Step 1
 
 Once we're done with that refactor, we can implement the remove button:
 
