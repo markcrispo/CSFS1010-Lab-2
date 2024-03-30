@@ -6,33 +6,78 @@ import { v4 as uuidv4 } from "uuid";
 
 const App = () => {
   const [todos, setTodos] = useState([
-    { title: "get groceries", isChecked: false, uuid: uuidv4() },
+    { title: "get groceries", isChecked: true, uuid: uuidv4() },
     { title: "walk the dog", isChecked: false, uuid: uuidv4() },
+    { title: "do laundry", isChecked: true, uuid: uuidv4() },
+    { title: "clean the house", isChecked: false, uuid: uuidv4() },
   ]);
 
-  console.log("todos:", todos);
+  const [filter, setFilter] = useState("all");
+
+  let numChecked = 0;
+
+  todos.forEach((todo) => {
+    if (todo.isChecked) {
+      numChecked += 1;
+    }
+  });
+
+  let filteredTodos;
+  if (filter === "all") {
+    filteredTodos = todos;
+  } else if (filter === "done") {
+    filteredTodos = todos.filter((todo) => todo.isChecked);
+  } else if (filter === "todo") {
+    filteredTodos = todos.filter((todo) => !todo.isChecked);
+  }
 
   return (
     <div>
       <h4>Task Tracker</h4>
 
-      {todos.map(({ title, isChecked, uuid }, index) => (
+      <div style={{ display: "flex", gap: "8px" }}>
+        Filters:
+        <button
+          onClick={() => setFilter("all")}
+          style={{ fontWeight: filter === "all" ? "bold" : "normal" }}
+        >
+          All
+        </button>
+        <button
+          onClick={() => setFilter("done")}
+          style={{ fontWeight: filter === "done" ? "bold" : "normal" }}
+        >
+          Done
+        </button>
+        <button
+          onClick={() => setFilter("todo")}
+          style={{ fontWeight: filter === "todo" ? "bold" : "normal" }}
+        >
+          To-do
+        </button>
+      </div>
+
+      {filteredTodos.map(({ title, isChecked, uuid }) => (
         <ToDoItem
           key={uuid}
           title={title}
           isChecked={isChecked}
           setIsChecked={(newIsChecked) => {
             const copyOfTodos = [...todos];
+            const index = copyOfTodos.findIndex((todo) => todo.uuid === uuid);
             copyOfTodos[index].isChecked = newIsChecked;
+
             setTodos(copyOfTodos);
           }}
           setTitle={(newTitle) => {
             const copyOfTodos = [...todos];
+            const index = copyOfTodos.findIndex((todo) => todo.uuid === uuid);
             copyOfTodos[index].title = newTitle;
             setTodos(copyOfTodos);
           }}
           handleRemove={() => {
             const copyOfTodos = [...todos];
+            const index = copyOfTodos.findIndex((todo) => todo.uuid === uuid);
             copyOfTodos.splice(index, 1);
             setTodos(copyOfTodos);
           }}
@@ -54,6 +99,10 @@ const App = () => {
       >
         Remove
       </button>
+      <div>
+        {numChecked} out of {todos.length} tasks completed.
+        {numChecked === todos.length ? " Great job!" : ""}
+      </div>
     </div>
   );
 };
