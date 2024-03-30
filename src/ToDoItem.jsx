@@ -1,9 +1,14 @@
+/* eslint-disable  react/prop-types */
 import { useState } from "react";
 
-const ToDoItem = () => {
-  const [isChecked, setIsChecked] = useState(false);
-  const [title, setTitle] = useState("");
-  const [isEditing, setIsEditing] = useState(true);
+const ToDoItem = ({
+  title,
+  setTitle,
+  isChecked,
+  setIsChecked,
+  handleRemove,
+}) => {
+  const [isEditing, setIsEditing] = useState(title === "");
   const [isHovering, setIsHovering] = useState(false);
 
   const enabled = title.length > 0;
@@ -37,9 +42,12 @@ const ToDoItem = () => {
       )}
 
       {(isHovering || isEditing) && (
-        <button onClick={() => setIsEditing(!isEditing)} disabled={!enabled}>
-          {isEditing ? "Save" : "Edit"}
-        </button>
+        <>
+          <button onClick={() => setIsEditing(!isEditing)} disabled={!enabled}>
+            {isEditing ? "Save" : "Edit"}
+          </button>
+          <button onClick={handleRemove}>Remove</button>
+        </>
       )}
     </div>
   );
